@@ -3,6 +3,7 @@ using System.Text.Json;
 using ClothesVirtualStore.Api.Cart.Models;
 using ClothesVirtualStore.Api.Cart.Services;
 using RabbitMQ.Client;
+using ClothesVirtualStore.CommonsLib.Models;
 
 namespace ClothesVirtualStore.Api.Cart;
 

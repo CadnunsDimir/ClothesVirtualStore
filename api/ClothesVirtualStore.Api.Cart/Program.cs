@@ -1,5 +1,6 @@
 using ClothesVirtualStore.Api.Cart;
 using ClothesVirtualStore.Api.Cart.Models;
+using ClothesVirtualStore.CommonsLib.Models;
 using ClothesVirtualStore.Api.Cart.Services;
 
 var sessionIdkey = "sessionId";
@@ -14,6 +15,7 @@ builder.Services.AddSession(options =>
         });
 builder.Services.AddDataProtection();
 builder.Services.AddTransient<ICartService, CartService>();
+builder.Services.AddTransient<IMQProcessingService, RabbitMQService>();
 var app = builder.Build();
 
 app.MapGet("/cart", (ICartService service, HttpContext httpContext) => {
