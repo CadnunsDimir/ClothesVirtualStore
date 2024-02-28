@@ -1,7 +1,6 @@
 
 
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 var options = new JsonSerializerOptions (JsonSerializerDefaults.Web)
@@ -21,7 +20,11 @@ var json = "[{\"id\":\"a5e7c482-49cc-4315-b360-3c6c02feb461\",\"name\":\"Camiset
 
 var products = JsonSerializer.Deserialize<List<Product>>(json, options);
 
-app.MapGet("/products", () => products);
+app.MapGet("/products/", () => products);
+app.MapGet("/products/{id}", IResult (Guid id) => {
+    var product =  products.FirstOrDefault(x=> x.Id == id);
+    return product is Product ? TypedResults.Ok(product) : TypedResults.NotFound();
+});
 
 app.Run();
 
