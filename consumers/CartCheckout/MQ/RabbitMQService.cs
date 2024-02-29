@@ -9,7 +9,7 @@ namespace ClothesVirtualStore.MicroServices.Consumers.CartCheckout.MQ;
 
 public class RabbitMQService
 {
-    public void ConsumeCheckoutQueue(EventHandler<BasicDeliverEventArgs> handler)
+    public async Task ConsumeCheckoutQueueAsync(CancellationToken stoppingToken, EventHandler<BasicDeliverEventArgs> handler)
     {
         string queueName = "ClothesVirtualStore.Cart.Checkout";
 
@@ -39,15 +39,19 @@ public class RabbitMQService
                 autoAck: true,
                 consumer
             );
+
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                await Task.Delay(1000, stoppingToken);
+            }
         }
     }
 
     public T? ParseBody<T>(BasicDeliverEventArgs ea)
     {
-        
-            var body = ea.Body.ToArray();
-            var message = Encoding.UTF8.GetString(body);
-            return JsonSerializer.Deserialize<T>(message);
+        var body = ea.Body.ToArray();
+        var message = Encoding.UTF8.GetString(body);
+        return JsonSerializer.Deserialize<T>(message);
     }
 
     public void PublishOnPaymentQueue(OrderEntity order)
