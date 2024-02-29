@@ -1,13 +1,18 @@
 using ClothesVirtualStore.MicroServices.Consumers.CartCheckout.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace ClothesVirtualStore.MicroServices.Consumers.CartCheckout.Data;
+namespace ClothesVirtualStore.MicroServices.Consumers.CartCheckout.Data.Context;
 
-public class VirtualStoreDbContext : DbContext
+public class VirtualStoreDbContext : DbContext, IVirtualStoreDbContext
 {
-    public DbSet<CustomerEntity> Customer { get; set; }
-    public DbSet<OrderEntity> Order { get; set; }
-    public DbSet<OrderItemEntity> OrderItem { get; set; }
+    public DbSet<CustomerEntity> Customer { get; private set; }
+    public DbSet<OrderEntity> Order { get; private set; }
+    public DbSet<OrderItemEntity> OrderItem { get; private set; }
+
+    public void PrepareDataBase()
+    {
+        Database.EnsureCreated();
+    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
