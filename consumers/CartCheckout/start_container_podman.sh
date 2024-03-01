@@ -17,4 +17,6 @@ podman build . -t $MICROSERVICE_NAME --build-arg env=LocalPodman
 rm -r bin/$COMMON_LIB
 
 # podman network create -d macvlan -o parent=eth0 --subnet 255.255.255.0/24  $NET_NAME
-podman run --network=$NET_NAME --name $MICROSERVICE_NAME $MICROSERVICE_NAME
+# podman run --network=$NET_NAME --name $MICROSERVICE_NAME $MICROSERVICE_NAME
+
+podman run -d --name $MICROSERVICE_NAME $MICROSERVICE_NAME

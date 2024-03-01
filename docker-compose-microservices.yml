@@ -1,0 +1,13 @@
+ersion: '3.8'
+name: clothesvirtualstore_microservices
+
+services:  
+  # cart_consumer_microservice:
+  #   build: ./consumers/CartCheckout
+  #   environment:
+  #     env: LocalPodman
+  
+  virtualstoreapiproducts:
+    build: ./api/ClothesVirtualStore.Api.Products
+    ports:
+      - 8080:8080

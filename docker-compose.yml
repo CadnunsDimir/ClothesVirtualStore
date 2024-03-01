@@ -1,0 +1,45 @@
+version: '3.8'
+name: clothesvirtualstore_all
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_management               
+    ports: 
+      - 5672:5672 # (erlang) communication between the nodes and CLI tool
+      - 15672:15672 # communication with the web management API
+    volumes:
+      # data persistence
+      - /docker_conf/rabbitmq/data/:/var/lib/rabbitmq/
+    # data mapping -> host: container
+    # queues and messages data of the container will be stored on the host
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=123456
+    restart: always
+
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: mysql
+    ports:
+      - 3306:3306
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: virtualstore
+  
+  virtualstoreapiproducts:
+    image: virtualstoreapiproducts
+    build: 
+      context: ./api/ClothesVirtualStore.Api.Products
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8080:8080
+  
+
+volumes:
+    logs-folder:
+        name: ${log_rabbitmq_management}
+        driver: local
