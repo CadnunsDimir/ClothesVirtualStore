@@ -57,5 +57,8 @@ public class CartCheckoutWorker: BackgroundService
 
 public class AppConstants
 {
+    internal static readonly string ProductsApiKey = "ProductsApi";
+    internal static readonly string RabbitMQHostNameKey = "RabbitMQ";
     public static string appName = "[CartCheckout.MQ.Consumer]";
+    public static string DbName = "MySql";
 }

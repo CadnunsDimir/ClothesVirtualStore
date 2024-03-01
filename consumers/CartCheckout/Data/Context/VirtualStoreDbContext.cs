@@ -5,9 +5,16 @@ namespace ClothesVirtualStore.MicroServices.Consumers.CartCheckout.Data.Context;
 
 public class VirtualStoreDbContext : DbContext, IVirtualStoreDbContext
 {
+    private readonly IConfiguration _configuration;
+
     public DbSet<CustomerEntity> Customer { get; private set; }
     public DbSet<OrderEntity> Order { get; private set; }
     public DbSet<OrderItemEntity> OrderItem { get; private set; }
+
+    public VirtualStoreDbContext(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
 
     public void PrepareDataBase()
     {
@@ -16,7 +23,7 @@ public class VirtualStoreDbContext : DbContext, IVirtualStoreDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseMySQL("Server=localhost;DataBase=VirtualStore;Uid=root;Pwd=123456");
+        optionsBuilder.UseMySQL(_configuration.GetConnectionString(AppConstants.DbName));
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

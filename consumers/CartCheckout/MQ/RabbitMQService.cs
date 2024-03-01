@@ -9,13 +9,19 @@ namespace ClothesVirtualStore.MicroServices.Consumers.CartCheckout.MQ;
 
 public class RabbitMQService
 {
+    private readonly IConfiguration _configuration;
+
+    public RabbitMQService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
     public async Task ConsumeCheckoutQueueAsync(CancellationToken stoppingToken, EventHandler<BasicDeliverEventArgs> handler)
     {
         string queueName = "ClothesVirtualStore.Cart.Checkout";
 
         var factory = new ConnectionFactory
         {
-            HostName = "localhost",
+            HostName = _configuration.GetConnectionString(AppConstants.RabbitMQHostNameKey),
             UserName = "admin",
             Password = "123456"
         };

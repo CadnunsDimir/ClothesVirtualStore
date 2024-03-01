@@ -7,13 +7,19 @@ namespace ClothesVirtualStore.MicroServices.Consumers.CartCheckout.Data.Reposito
 
 public class StoreProductsRepository : IStoreProductsRepository
 {
+    private readonly string _apiUrl;
+
+    public StoreProductsRepository(IConfiguration configuration)
+    {
+        _apiUrl = configuration.GetConnectionString(AppConstants.ProductsApiKey) ?? "";
+    }
     public List<StoreProductsEntity> QueryByIds(Guid[] idsAArray)
     {
         return idsAArray.Select(GetById).ToList();
     }
 
     private StoreProductsEntity GetById(Guid id){
-        var client = new RestClient($"http://localhost:5020/products/{id}");
+        var client = new RestClient($"{_apiUrl}/{id}");
         var request = new RestRequest
         {
             Method = Method.Get
