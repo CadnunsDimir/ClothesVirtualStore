@@ -1,13 +1,26 @@
-ersion: '3.8'
+version: '3.8'
 name: clothesvirtualstore_microservices
 
 services:  
-  # cart_consumer_microservice:
-  #   build: ./consumers/CartCheckout
-  #   environment:
-  #     env: LocalPodman
-  
   virtualstoreapiproducts:
-    build: ./api/ClothesVirtualStore.Api.Products
+    container_name: virtualstoreapiproducts
+    image: virtualstoreapiproducts
+    build: ./api/ClothesVirtualStore.Api.Products    
     ports:
       - 8080:8080
+    networks:
+      - clothesvirtualstore_network
+  consumercartcheckout:
+    image: consumercartcheckout
+    container_name: consumercartcheckout
+    build: 
+      context: ./consumers/CartCheckout
+      dockerfile: Dockerfile
+      args:
+        APP_ENVIRONMENT: LocalPodman
+    restart: always
+    networks:
+      - clothesvirtualstore_network
+networks:
+  clothesvirtualstore_network:
+    external: true

@@ -12,7 +12,7 @@ podman rm $MICROSERVICE_NAME
 podman rmi $(podman images $MICROSERVICE_NAME -a -q)
 # podman network rm $NET_NAME
 
-podman build . -t $MICROSERVICE_NAME --build-arg env=LocalPodman
+podman build . -t $MICROSERVICE_NAME --build-arg APP_ENVIRONMENT=LocalPodman
 
 rm -r bin/$COMMON_LIB
 
