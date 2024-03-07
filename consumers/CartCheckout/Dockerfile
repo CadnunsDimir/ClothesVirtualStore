@@ -12,10 +12,10 @@ RUN dotnet restore *.csproj
 
 RUN echo Nome do ambiente ${APP_ENVIRONMENT}
 
-RUN dotnet publish *.csproj -c ${APP_ENVIRONMENT} -o /app --no-restore
+RUN dotnet publish *.csproj -o /app --no-restore
 
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app ./
-ENTRYPOINT ["dotnet", "ClothesVirtualStore.MicroServices.Consumers.CartCheckout.dll"]
+ENTRYPOINT dotnet ClothesVirtualStore.MicroServices.Consumers.CartCheckout.dll --environment=LocalPodman

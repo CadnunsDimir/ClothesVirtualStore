@@ -23,6 +23,7 @@ public class VirtualStoreDbContext : DbContext, IVirtualStoreDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        Console.WriteLine($"MySql.Connection: {_configuration.GetConnectionString(AppConstants.DbName)}");
         optionsBuilder.UseMySQL(_configuration.GetConnectionString(AppConstants.DbName));
     }
 

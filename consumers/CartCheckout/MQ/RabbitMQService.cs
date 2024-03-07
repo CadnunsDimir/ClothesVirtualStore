@@ -26,6 +26,8 @@ public class RabbitMQService
             Password = "123456"
         };
 
+        Console.WriteLine($"MQ.hostname: {factory.HostName}");
+
         using var connection = factory.CreateConnection();
         using (var channel = connection.CreateModel())
         {

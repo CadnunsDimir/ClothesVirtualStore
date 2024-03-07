@@ -10,6 +10,8 @@ RUN dotnet publish -c release -o /app --no-restore
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app ./
+RUN apt-get update -y
+RUN apt-get install -y curl
 ENTRYPOINT ["dotnet", "ClothesVirtualStore.Api.Products.dll"]
 
 # IF NECESSARY, EXPOSE PORT 80

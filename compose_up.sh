@@ -12,8 +12,8 @@ cp -a commons/$COMMON_LIB api/ClothesVirtualStore.Api.Cart/bin/$COMMON_LIB/
 podman compose -f docker-compose.yml up --detach
 podman compose -f docker-compose-microservices.yml up --detach
 
-echo "[consumercartcheckout] Test mysql"
-podman exec -ti consumercartcheckout ping mysql
+echo Aguardando ...
+sleep 10
 
-echo "[consumercartcheckout] Test rabbitmq"
-podman exec -ti consumercartcheckout ping rabbitmq
+echo "[api.products] Test rabbitmq admin"
+podman exec -ti virtualstoreapiproducts curl http://rabbitmq:15672
