@@ -12,8 +12,5 @@ cp -a commons/$COMMON_LIB api/ClothesVirtualStore.Api.Cart/bin/$COMMON_LIB/
 podman compose -f docker-compose.yml up --detach
 podman compose -f docker-compose-microservices.yml up --detach
 
-echo Aguardando ...
-sleep 10
-
-echo "[api.products] Test rabbitmq admin"
-podman exec -ti virtualstoreapiproducts curl http://rabbitmq:15672
+# remove orphans/dangling images
+podman image prune --force

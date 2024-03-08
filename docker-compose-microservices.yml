@@ -21,6 +21,19 @@ services:
     restart: always
     networks:
       - clothesvirtualstore_network
+  virtualstoreapicart:
+    image: virtualstoreapicart
+    container_name: virtualstoreapicart
+    build: 
+      context: ./api/ClothesVirtualStore.Api.Cart
+      dockerfile: Dockerfile
+      args:
+        APP_ENVIRONMENT: LocalPodman
+    ports:
+      - 8081:8080
+    restart: always
+    networks:
+      - clothesvirtualstore_network
 networks:
   clothesvirtualstore_network:
     external: true
