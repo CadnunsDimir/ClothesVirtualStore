@@ -10,10 +10,11 @@ COPY . .
 
 RUN dotnet restore *.csproj
 
-RUN dotnet publish *.csproj -c ${APP_ENVIRONMENT} -o /app --no-restore
+RUN dotnet publish *.csproj -o /app --no-restore
 
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app ./
-ENTRYPOINT ["dotnet", "ClothesVirtualStore.Api.Cart.dll"]
+ENTRYPOINT ["dotnet", "ClothesVirtualStore.Api.Cart.dll", "--environment=Container"]
+EXPOSE 8080

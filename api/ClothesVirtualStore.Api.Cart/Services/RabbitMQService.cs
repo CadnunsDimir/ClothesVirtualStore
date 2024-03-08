@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using System.Text.Json;
-using ClothesVirtualStore.Api.Cart.Models;
 using ClothesVirtualStore.Api.Cart.Services;
 using RabbitMQ.Client;
 using ClothesVirtualStore.CommonsLib.Models;
@@ -10,10 +9,18 @@ namespace ClothesVirtualStore.Api.Cart;
 public class RabbitMQService : IMQProcessingService
 {
     string queueName = "ClothesVirtualStore.Cart.Checkout";
+
+    private readonly IConfiguration _configuration;
+
+    public RabbitMQService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+    
     public void EnqueueOrder(Order order)
     {
         var factory = new ConnectionFactory { 
-            HostName = "localhost" ,
+            HostName = _configuration.GetConnectionString("RabbitMQHostName") ?? "localhost",
             UserName = "admin",
             Password = "123456"
         };
