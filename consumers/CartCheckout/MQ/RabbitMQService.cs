@@ -10,10 +10,12 @@ namespace ClothesVirtualStore.MicroServices.Consumers.CartCheckout.MQ;
 public class RabbitMQService
 {
     private readonly IConfiguration _configuration;
+    private readonly ILogger<CartCheckoutWorker> _logger;
 
-    public RabbitMQService(IConfiguration configuration)
+    public RabbitMQService(IConfiguration configuration, ILogger<CartCheckoutWorker> logger)
     {
         _configuration = configuration;
+        _logger = logger;
     }
     public async Task ConsumeCheckoutQueueAsync(CancellationToken stoppingToken, EventHandler<BasicDeliverEventArgs> handler)
     {
@@ -26,7 +28,7 @@ public class RabbitMQService
             Password = "123456"
         };
 
-        Console.WriteLine($"MQ.hostname: {factory.HostName}");
+        _logger.LogInformation($"MQ.hostname: {factory.HostName}");
 
         using var connection = factory.CreateConnection();
         using (var channel = connection.CreateModel())
@@ -55,16 +57,23 @@ public class RabbitMQService
         }
     }
 
-    public T? ParseBody<T>(BasicDeliverEventArgs ea)
+    public T ParseBody<T>(BasicDeliverEventArgs ea)
     {
         var body = ea.Body.ToArray();
         var message = Encoding.UTF8.GetString(body);
-        return JsonSerializer.Deserialize<T>(message);
+        _logger.LogInformation($"{AppConstants.appName} json: {message}");
+        var result =  JsonSerializer.Deserialize<T>(message);
+        if (result == null)
+        {
+            throw new JsonException("MessageQueueBody deserialize response is null");
+        }
+        _logger.LogInformation($"{AppConstants.appName} parsed: {result}");
+        return result;
     }
 
     public void PublishOnPaymentQueue(OrderEntity order)
     {
-        Console.WriteLine($"{AppConstants.appName} ... PublishOnPaymentQueue routine not implemented  ...");
+        _logger.LogInformation($"{AppConstants.appName} ... PublishOnPaymentQueue routine not implemented  ...");
     }
 }
 

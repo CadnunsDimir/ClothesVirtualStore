@@ -26,7 +26,8 @@ public class CartCheckoutWorker: BackgroundService
             {
                 LogInfo($"{AppConstants.appName} ... Begin of Processing  ...");
 
-                var orderFromQueue = _queueService.ParseBody<Order>(ea) ?? throw new ArgumentNullException("orderFromQueue");
+                Order orderFromQueue = _queueService.ParseBody<Order>(ea);
+                _logger.LogInformation($"{AppConstants.appName} orderFromQueue: {orderFromQueue}");
                 var customer = _useCases.CreateOrSelectCustomer(orderFromQueue);
                 var order = _useCases.CreateOrder(orderFromQueue, customer);
                 _useCases.CreateOrderItens(orderFromQueue, order);

@@ -10,5 +10,5 @@ public class OrderItemEntity
     public required string ProductName { get; set; }
     public decimal ProductPrice { get; set; }
     public int ProductAmount { get; set; }
-    public OrderEntity Order { get; set; }
+    public OrderEntity? Order { get; set; }
 }

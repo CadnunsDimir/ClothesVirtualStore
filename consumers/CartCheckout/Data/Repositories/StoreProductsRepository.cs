@@ -25,7 +25,7 @@ public class StoreProductsRepository : IStoreProductsRepository
             Method = Method.Get
         };
         var response = client.Execute<StoreProductsEntity>(request);
-        return response.Data ?? throw new ArgumentNullException("orderFromQueue");
+        return response.Data ?? throw new Exception("IStoreProductsRepository.GetById has returned null");
     }
 }
 

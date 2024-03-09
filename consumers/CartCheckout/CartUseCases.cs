@@ -43,17 +43,17 @@ public class CartUseCases
 
     internal void CreateOrderItens(Order orderFromQueue, OrderEntity order)
     {
-        var products = _productsRepository.QueryByIds(orderFromQueue.itens.Select(x=>x.ProductId).ToArray());
+        var products = _productsRepository.QueryByIds(orderFromQueue.itens.Select(x=>x.productId).ToArray());
 
         var itens = orderFromQueue.itens.Select(x => {
-            var product = products.First(product=>product.Id == x.ProductId);
+            var product = products.First(product=>product.Id == x.productId);
 
             return new OrderItemEntity
             {
                 ProductName = product.Name,
                 ProductPrice = product.Price,
-                ProductAmount = x.Amount,
-                TotalValue = x.Amount * product.Price,
+                ProductAmount = x.amount,
+                TotalValue = x.amount * product.Price,
                 Order = order
             };
         }).ToList();

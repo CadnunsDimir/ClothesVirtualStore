@@ -15,10 +15,7 @@ public class CartService : ICartService
     public Models.Cart GetCart(string sessionId) => new Models.Cart(
         sessionId,
         new List<CartItem> {
-                new CartItem {
-                    Amount = 2,
-                    ProductId = Guid.Parse("a5e7c482-49cc-4315-b360-3c6c02feb461")
-                }
+                new CartItem(2, Guid.Parse("a5e7c482-49cc-4315-b360-3c6c02feb461"))
             }
     );
     
