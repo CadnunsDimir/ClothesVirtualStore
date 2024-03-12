@@ -30,10 +30,7 @@ volumes:
     logs-folder:
         name: ${log_rabbitmq_management}
         driver: local
-# networks:
-#   clothesvirtualstore_network:
-#     name: clothesvirtualstore_network
-#     driver: bridge  
 networks:
   clothesvirtualstore_network:
-    external: true
+    name: clothesvirtualstore_network
+    driver: bridge
