@@ -8,10 +8,9 @@ namespace ClothesVirtualStore.Api.Cart;
 public class CartService : ICartService
 {
     private IMQProcessingService mQProcessingService;
-    private readonly ICachingService caching;
-    private List<Models.Cart> cartRepository = new List<Models.Cart>();
+    private readonly ICachingService<Models.Cart> caching;
 
-    public CartService(ICachingService caching, IMQProcessingService mQProcessingService)
+    public CartService(ICachingService<Models.Cart> caching, IMQProcessingService mQProcessingService)
     {
         this.mQProcessingService = mQProcessingService;
         this.caching = caching;
@@ -20,12 +19,7 @@ public class CartService : ICartService
     // TODO: implement redis    
     // public Models.Cart? GetCart(Guid sessionId) => cartRepository.FirstOrDefault(x=> x.SessionId == sessionId.ToString());
     public async Task<Models.Cart?> GetCart(string sessionId) {
-        var cartCache = await caching.GetAsync(sessionId);
-        if (!string.IsNullOrWhiteSpace(cartCache))
-        {
-            return JsonSerializer.Deserialize<Models.Cart>(cartCache);
-        }
-        return null;
+        return await caching.GetAsync(sessionId);
     }
 
     public Order Checkout(Models.Cart cart, string cpf)
@@ -37,23 +31,17 @@ public class CartService : ICartService
 
     public async void UpdateCart(Models.Cart cart)
     {
-        await caching.SetAsync(cart.SessionId, JsonSerializer.Serialize(cart));
+        await caching.SetAsync(cart.SessionId, cart);
     }
 
-    public Models.Cart CreatOrGetCart(string? sessionIdAsString)
+    public async Task<Models.Cart?> CreatOrGetCart(string? sessionIdAsString)
     {
-        Guid sessionId;
-        Models.Cart? cart = null;
-        var isGuid = Guid.TryParse(sessionIdAsString, out sessionId);
-
-        if(isGuid){
-            cart = cartRepository.FirstOrDefault(x=> x.SessionId == sessionIdAsString);
-        }
+        var cart = await caching.GetAsync(sessionIdAsString ?? "");
 
         if (cart == null)
         {
             cart = GenerateNew();
-            cartRepository.Add(cart);
+            await caching.SetAsync(cart.SessionId, cart);
         }
 
         return cart;

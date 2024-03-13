@@ -1,7 +1,8 @@
+using System.Text.Json;
 using ClothesVirtualStore.Api.Cart.Models;
 using Microsoft.Extensions.Caching.Distributed;
 
-public class CachingService : ICachingService
+public class CachingService : ICachingService<Cart>
 {
     private readonly IDistributedCache cache;
     private readonly DistributedCacheEntryOptions options;
@@ -14,13 +15,15 @@ public class CachingService : ICachingService
             SlidingExpiration = TimeSpan.FromMinutes(5)
         };
     }
-    public async Task<string?> GetAsync(string key)
+    public async Task<Cart?> GetAsync(string key)
     {
-        return await cache.GetStringAsync(key);
+        var valueCache = await cache.GetStringAsync(key);
+        return !string.IsNullOrEmpty(valueCache)? JsonSerializer.Deserialize<Cart?>(valueCache) : null;
     }
 
-    public async Task SetAsync(string key, string value)
+    public async Task SetAsync(string key, Cart value)
     {
-        await cache.SetStringAsync(key, value, options);
+        var valueCache = JsonSerializer.Serialize(value);
+        await cache.SetStringAsync(key, valueCache, options);
     }
 }

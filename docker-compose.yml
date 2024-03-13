@@ -26,6 +26,13 @@ services:
       MYSQL_DATABASE: virtualstore
     networks:
       - clothesvirtualstore_network
+  redis:
+    image: redis
+    command: redis-server --requirepass Redis2019!
+    ports:
+      - 6379:6379
+    networks:
+      - clothesvirtualstore_network
 volumes:
     logs-folder:
         name: ${log_rabbitmq_management}

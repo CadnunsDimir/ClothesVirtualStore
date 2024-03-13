@@ -1,5 +1,5 @@
-public interface ICachingService
+public interface ICachingService<T>
 {
-    Task<string?> GetAsync(string key);
-    Task SetAsync(string key, string value);
+    Task<T?> GetAsync(string key);
+    Task SetAsync(string key, T value);
 }

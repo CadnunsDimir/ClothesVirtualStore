@@ -3,20 +3,17 @@ using ClothesVirtualStore.Api.Cart.Models;
 using ClothesVirtualStore.Api.Cart.Services;
 using ClothesVirtualStore.CommonsLib.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-        {
-            options.IdleTimeout = TimeSpan.FromMinutes(30);//We set Time here 
-            options.Cookie.HttpOnly = true;
-            options.Cookie.IsEssential = true;
-        });
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 builder.Services.AddDataProtection();
 builder.Services.AddTransient<ICartService, CartService>();
 builder.Services.AddTransient<IMQProcessingService, RabbitMQService>();
-builder.Services.AddScoped<ICachingService, CachingService>();
+builder.Services.AddScoped<ICachingService<Cart>, CachingService>();
 builder.Services.AddStackExchangeRedisCache(options =>
  {
      options.Configuration = builder.Configuration.GetConnectionString("redis");
@@ -25,12 +22,18 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 var app = builder.Build();
 
-app.MapGet("/cart", (ICartService service, HttpContext httpContext) => {
-    var cardId = getCartIdFromHeader(httpContext); 
-    return service.CreatOrGetCart(cardId);
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.MapGet("/cart", ([FromHeader] string? cartId, ICartService service, HttpContext httpContext) => {
+    Console.WriteLine(cartId);
+    return service.CreatOrGetCart(cartId);
 });
 
-app.MapPost("/cart/{cartId}/item", async Task<Results<Ok<Cart>, NotFound>> (string cartId, CartItem body, ICartService service, HttpContext httpContext) => {
+app.MapPost("/cart/item", async Task<Results<Ok<Cart>, NotFound>> (CartItem body, [FromHeader()] string cartId, ICartService service, HttpContext httpContext) => {
     var cart = await service.GetCart(cartId);
     if (cart == null)
     {
@@ -41,15 +44,13 @@ app.MapPost("/cart/{cartId}/item", async Task<Results<Ok<Cart>, NotFound>> (stri
     return TypedResults.Ok(cart);
 });
 
-app.MapPost("/cart/checkout", async Task<Results<Ok<Order>, NotFound>> (CheckoutCart body, ICartService service, HttpContext httpContext) => {
-    var cardId = getCartIdFromHeader(httpContext);
-
-    if (string.IsNullOrEmpty(cardId))
+app.MapPost("/cart/checkout", async Task<Results<Ok<Order>, NotFound>> (CheckoutCart body, [FromHeader()] string cartId, ICartService service, HttpContext httpContext) => {
+    if (string.IsNullOrEmpty(cartId))
     {
         throw new UnauthorizedAccessException("'cardId' header not defined");
     }
 
-    var cart = await service.GetCart(cardId);
+    var cart = await service.GetCart(cartId);
     if (cart == null)
     {
         return TypedResults.NotFound();
@@ -58,14 +59,4 @@ app.MapPost("/cart/checkout", async Task<Results<Ok<Order>, NotFound>> (Checkout
     return TypedResults.Ok(order);
 });
 
-string? getCartIdFromHeader(HttpContext httpContext)
-{
-    StringValues cartIdHeader;
-    if(httpContext.Request.Headers.TryGetValue("cartId", out cartIdHeader)){
-        return cartIdHeader.First();
-    }
-    return null;
-}
-
-app.UseSession();
 app.Run();

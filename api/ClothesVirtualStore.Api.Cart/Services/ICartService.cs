@@ -9,5 +9,5 @@ public interface ICartService
     Task<Models.Cart?> GetCart(string sessionId);
     Order Checkout(Models.Cart cart, string cpf);
     void UpdateCart(Models.Cart cart);
-    Models.Cart CreatOrGetCart(string? sessionId);
+    Task<Models.Cart?> CreatOrGetCart(string? sessionId);
 }
