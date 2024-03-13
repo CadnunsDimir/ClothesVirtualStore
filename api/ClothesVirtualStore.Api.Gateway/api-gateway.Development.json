@@ -1,0 +1,28 @@
+{
+    "Routes": [
+        {
+            "UpstreamHttpMethod": [ "Get" ],
+            "UpstreamPathTemplate": "/api/products/",
+            "DownstreamPathTemplate": "/products/",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8080
+                }
+            ]
+        },
+        {
+            "UpstreamHttpMethod": [ "Get", "Post" ],
+            "UpstreamPathTemplate": "/api/cart/{everything}",
+            "DownstreamPathTemplate": "/cart/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 8081
+                }
+            ]
+        }
+    ]
+}
