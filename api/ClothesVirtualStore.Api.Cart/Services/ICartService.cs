@@ -6,6 +6,8 @@ namespace ClothesVirtualStore.Api.Cart.Services;
 
 public interface ICartService
 {
-    Models.Cart GetCart(string sessionId);
+    Task<Models.Cart?> GetCart(string sessionId);
     Order Checkout(Models.Cart cart, string cpf);
+    void UpdateCart(Models.Cart cart);
+    Models.Cart CreatOrGetCart(string? sessionId);
 }
