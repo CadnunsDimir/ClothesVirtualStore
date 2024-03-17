@@ -67,9 +67,7 @@ services:
       - rabbitmq
   apitoken:
     image: virtualstoreapitoken
-    build: 
-      context: ./api/ClothesVirtualStore.Api.Token
-      dockerfile: Dockerfile
+    build: ./api/ClothesVirtualStore.Api.Token
     networks:
       - clothesvirtualstore_network
   apigateway:
