@@ -33,9 +33,7 @@ services:
       - clothesvirtualstore_network
   apiproducts:
     image: virtualstoreapiproducts
-    build: ./api/ClothesVirtualStore.Api.Products    
-    ports:
-      - 8080:8080
+    build: ./api/ClothesVirtualStore.Api.Products
     networks:
       - clothesvirtualstore_network
     restart: always
@@ -62,13 +60,27 @@ services:
       dockerfile: Dockerfile
       args:
         APP_ENVIRONMENT: LocalPodman
-    ports:
-      - 8081:8080
     restart: always
     networks:
       - clothesvirtualstore_network
     depends_on:
       - rabbitmq
+  apitoken:
+    image: virtualstoreapitoken
+    build: 
+      context: ./api/ClothesVirtualStore.Api.Token
+      dockerfile: Dockerfile
+    networks:
+      - clothesvirtualstore_network
+  apigateway:
+    image: virtualstoreapigateway
+    build: 
+      context: ./api/ClothesVirtualStore.Api.Gateway
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    networks:
+      - clothesvirtualstore_network
 volumes:
     logs-folder:
         name: ${log_rabbitmq_management}

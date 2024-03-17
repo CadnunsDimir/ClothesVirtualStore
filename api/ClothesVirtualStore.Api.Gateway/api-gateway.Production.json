@@ -7,8 +7,8 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
-                    "Port": 5126
+                    "Host": "apitoken",
+                    "Port": 8080
                 }
             ]
         },
@@ -19,7 +19,7 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
+                    "Host": "apiproducts",
                     "Port": 8080
                 }
             ]
@@ -31,8 +31,8 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
-                    "Port": 8081
+                    "Host": "apicart",
+                    "Port": 8080
                 }
             ]
         }
