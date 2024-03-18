@@ -4,6 +4,7 @@ using ClothesVirtualStore.Api.Products.Data.Repositories;
 using ClothesVirtualStore.Api.Products.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddClothesVirtualStoreAuthentication();
 builder.Services.AddSingleton<ProductsEndPoints>();
 builder.Services.AddTransient<IProductsRepository, ProductsRepository>();
 builder.Services.AddDbContext<IProductsDbContext, ProductsDbContext>();
@@ -17,4 +18,5 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<IProductsDbContext>();
     context.InitDatabase();
 }
+app.UseClothesVirtualStoreAuthentication();
 app.Run();
