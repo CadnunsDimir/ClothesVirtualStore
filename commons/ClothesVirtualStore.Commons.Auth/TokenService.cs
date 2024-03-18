@@ -23,7 +23,7 @@ public class TokenService
 
     private static Claim[] GetClaims(User user) => [
         new Claim(ClaimTypes.Name, user.UserName),
-        new Claim("Role", user.Role),
+        new Claim(ClaimTypes.Role, user.Role.ToString()),
     ];
 }
 
