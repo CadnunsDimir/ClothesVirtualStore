@@ -10,5 +10,9 @@
     <ProjectReference Include="..\..\commons\ClothesVirtualStore.Commons.Auth\ClothesVirtualStore.Commons.Auth.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MySql.EntityFrameworkCore" Version="8.0.0" />
+  </ItemGroup>
+
 
 </Project>
