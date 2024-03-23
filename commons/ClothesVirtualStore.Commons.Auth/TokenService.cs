@@ -1,7 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ClothesVirtualStore.Commons.Auth;
@@ -22,8 +21,9 @@ public class TokenService
     }
 
     private static Claim[] GetClaims(User user) => [
-        new Claim(ClaimTypes.Name, user.UserName),
-        new Claim(ClaimTypes.Role, user.Role.ToString()),
+        new (ClaimTypes.Name, user.UserName),
+        new (ClaimTypes.Role, user.Role.ToString()),
+        new (ClaimTypes.Email, user.Email)
     ];
 }
 
