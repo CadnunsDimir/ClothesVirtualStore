@@ -16,20 +16,12 @@ public class UserRepository: IUserRepository
         dbContext.SaveOnDb();
     }
 
-    public bool Exists(string email, string password) => dbContext.Users.Any(x=> x.Email == email && x.Password == password);
+    public bool Exists(string email, string password) => 
+        dbContext.Users.Any(x=> x.Email == email && x.Password == password);
 
-    public UserEntity? Get(string email, string password)
-    {
-        // var db = new User[] {
-        //     new User("calangoSpider", "calango@spider.com" , CustomRoles.Admin, "123456")
-        // };
+    public UserEntity? Get(string email, string password) => 
+        dbContext.Users.FirstOrDefault(x=> x.Email == email && x.Password == password);
 
-        // return db.FirstOrDefault(x=> x.Email == email && x.Password == password);
-        return dbContext.Users.FirstOrDefault(x=> x.Email == email && x.Password == password);
-    }
-
-    public UserEntity? Get(string email)
-    {
-        return dbContext.Users.FirstOrDefault(x=> x.Email == email);
-    }
+    public UserEntity? Get(string email) => 
+        dbContext.Users.FirstOrDefault(x=> x.Email == email);
 }

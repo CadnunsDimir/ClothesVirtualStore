@@ -5,7 +5,7 @@ public class User
 { 
     public required string UserName { get; set; }
     public required string Email { get; set; }
-    public required CustomRoles Role { get; set; } 
+    public required string Role { get; set; } 
     public required string Cpf { get; set; }
 
     public static User? Map(UserEntity? userEntity) {
@@ -15,7 +15,7 @@ public class User
             {
                 Cpf = userEntity.Cpf,
                 Email = userEntity.Email,
-                Role = CustomRoles.Parse(userEntity.Role),
+                Role = CustomRoles.Parse(userEntity.Role).ToString(),
                 UserName = userEntity.UserName
             };
         }
