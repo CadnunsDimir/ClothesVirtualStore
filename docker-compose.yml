@@ -68,8 +68,11 @@ services:
   apitoken:
     image: virtualstoreapitoken
     build: ./api/ClothesVirtualStore.Api.Token
+    restart: always
     networks:
       - clothesvirtualstore_network
+    depends_on:
+      - mysql
   apigateway:
     image: virtualstoreapigateway
     build: 
